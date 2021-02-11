@@ -13,6 +13,7 @@ namespace Blood72\Riot\Models;
  * @property string $version
  * @property array|\Illuminate\Support\Collection $teams
  * @property array|\Illuminate\Support\Collection $participants
+ * @property array|\Illuminate\Support\Collection $participant_identities
  * @property int $duration
  * @property \Illuminate\Support\Carbon $created_at
  */

@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 /**
  * @property string $summoner_id
  * @property int $match_id
+ * @property string $platform
+ * @property int $season
+ * @property int $champion
+ * @property int $duration
+ * @property \Illuminate\Support\Carbon $created_at
  */
 class MatchReference extends Model
 {
