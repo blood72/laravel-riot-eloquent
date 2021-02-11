@@ -1,0 +1,80 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateRiotTables extends Migration
+{
+    /**
+     * @param string $name
+     * @return string
+     */
+    protected function getTableName(string $name): string
+    {
+        return config('riot-eloquent.tables.prefix') . $name;
+    }
+
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create($this->getTableName('summoners'), function (Blueprint $table) {
+            if (config('riot-eloquent.tables.connect_with_user_model')) {
+                $table->foreignId('user_id')->nullable()->constrained();
+            }
+            $table->string('id')->primary();
+            $table->string('puuid')->unique();
+            $table->string('account_id')->unique();
+            $table->string('name');
+            $table->integer('icon')->unsigned();
+            $table->bigInteger('level')->unsigned();
+            $table->timestamp('updated_at');
+        });
+
+        Schema::create($this->getTableName('match_infos'), function (Blueprint $table) {
+            $table->bigInteger('id')->unsigned()->primary();
+            $table->string('platform');
+            $table->integer('season')->unsigned();
+            $table->integer('queue')->unsigned();
+            $table->integer('map')->unsigned();
+            $table->string('game_type');
+            $table->string('game_mode');
+            $table->string('version');
+            $table->json('teams')->nullable();
+            $table->json('participants')->nullable();
+            $table->json('participant_identities')->nullable();
+            $table->bigInteger('duration')->unsigned();
+            $table->timestamp('created_at');
+        });
+
+        Schema::create($this->getTableName('match_references'), function (Blueprint $table) {
+            $table->string('summoner_id')->index();
+            $table->foreignId('match_id')->index();
+            $table->string('platform');
+            $table->integer('season')->unsigned();
+            $table->integer('champion')->unsigned();
+            $table->bigInteger('duration')->unsigned()->nullable();
+            $table->timestamp('created_at');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::disableForeignKeyConstraints();
+
+        Schema::dropIfExists($this->getTableName('summoners'));
+        Schema::dropIfExists($this->getTableName('match_infos'));
+        Schema::dropIfExists($this->getTableName('match_references'));
+
+        Schema::enableForeignKeyConstraints();
+    }
+}
