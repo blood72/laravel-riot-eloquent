@@ -82,9 +82,7 @@ class MatchInfo extends Model
     {
         $pivotClass = $this->getClassFromConfig('match_reference');
 
-        return $this->belongsToMany(
-            $this->getClassFromConfig('summoner'),
-            app($pivotClass)->getTable()
-        )->using($pivotClass);
+        return $this->belongsToMany($this->getClassFromConfig('summoner'), app($pivotClass)->getTable())
+            ->using($pivotClass);
     }
 }

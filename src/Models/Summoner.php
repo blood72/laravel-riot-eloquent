@@ -66,10 +66,9 @@ class Summoner extends Model
     {
         $pivotClass = $this->getClassFromConfig('match_reference');
 
-        return $this->belongsToMany(
-            $this->getClassFromConfig('match_info'),
-            app($pivotClass)->getTable()
-        )->using($pivotClass);
+        return $this->belongsToMany($this->getClassFromConfig('match_info'), app($pivotClass)->getTable())
+            ->using($pivotClass)
+            ->withPivot('champion');
     }
 
     /**
