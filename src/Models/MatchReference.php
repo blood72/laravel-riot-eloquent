@@ -58,11 +58,21 @@ class MatchReference extends Model
     protected $primaryKey = null;
 
     /**
-     * {@inheritDoc}
+     * {@inheritDoc} - avoid to use AsPivot trait method
      */
     public function getTable()
     {
         return parent::getTable();
+    }
+
+    /**
+     * Get the default foreign key name for the model.
+     *
+     * @return string
+     */
+    public function getForeignKey()
+    {
+        return 'match_id';
     }
 
     /**

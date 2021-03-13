@@ -58,6 +58,16 @@ class MatchInfo extends Model
     ];
 
     /**
+     * Get the default foreign key name for the model.
+     *
+     * @return string
+     */
+    public function getForeignKey()
+    {
+        return 'match_id';
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function reference()
@@ -70,7 +80,11 @@ class MatchInfo extends Model
      */
     public function summoners()
     {
-        return $this->belongsToMany($this->getClassFromConfig('summoner'))
-            ->using($this->getClassFromConfig('match_reference'));
+        $pivotClass = $this->getClassFromConfig('match_reference');
+
+        return $this->belongsToMany(
+            $this->getClassFromConfig('summoner'),
+            app($pivotClass)->getTable()
+        )->using($pivotClass);
     }
 }

@@ -64,8 +64,12 @@ class Summoner extends Model
      */
     public function matches()
     {
-        return $this->belongsToMany($this->getClassFromConfig('match_info'))
-            ->using($this->getClassFromConfig('match_reference'));
+        $pivotClass = $this->getClassFromConfig('match_reference');
+
+        return $this->belongsToMany(
+            $this->getClassFromConfig('match_info'),
+            app($pivotClass)->getTable()
+        )->using($pivotClass);
     }
 
     /**
